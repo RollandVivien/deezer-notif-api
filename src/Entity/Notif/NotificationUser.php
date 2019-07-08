@@ -34,6 +34,18 @@ class NotificationUser
      */
     private $seen = 0;
 
+    /**
+     * Relation polymorphique avec [album,playlist,track,user,podcast]
+     * 
+     * @ORM\Column(type="string", length=50, nullable=true)
+     */
+    private $sharedRef;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $sharedId;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -71,6 +83,30 @@ class NotificationUser
     public function setSeen(bool $seen): self
     {
         $this->seen = $seen;
+
+        return $this;
+    }
+
+    public function getSharedRef(): ?string
+    {
+        return $this->sharedRef;
+    }
+
+    public function setSharedRef(?string $sharedRef): self
+    {
+        $this->sharedRef = $sharedRef;
+
+        return $this;
+    }
+
+    public function getSharedId(): ?int
+    {
+        return $this->sharedId;
+    }
+
+    public function setSharedId(?int $sharedId): self
+    {
+        $this->sharedId = $sharedId;
 
         return $this;
     }
