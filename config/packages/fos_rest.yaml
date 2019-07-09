@@ -11,7 +11,7 @@ fos_rest:
     rules:
       - { path: ^/api, prefer_extension: true, fallback_format: json, priorities: [ json ] }
 
-#    param_fetcher_listener:  true
+  param_fetcher_listener:  true
 #    allowed_methods_listener:  true
 #    routing_loader: true
     

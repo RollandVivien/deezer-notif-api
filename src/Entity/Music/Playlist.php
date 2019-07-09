@@ -6,6 +6,8 @@ use App\Entity\User\User;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
+use JMS\Serializer\Annotation as Serializer;
+
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\Music\PlaylistRepository")
@@ -16,22 +18,26 @@ class Playlist
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Serializer\Groups({"listNotifs"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Serializer\Groups({"listNotifs"})
      */
     private $title;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Serializer\Groups({"listNotifs"})
      */
     private $createdAt;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User\User", inversedBy="playlists")
      * @ORM\JoinColumn(nullable=false)
+     * @Serializer\Groups({"listNotifs"})
      */
     private $author;
 

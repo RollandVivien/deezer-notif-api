@@ -5,6 +5,8 @@ namespace App\Entity\Music;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as Serializer;
+
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\Music\ArtistRepository")
@@ -15,16 +17,19 @@ class Artist
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Serializer\Groups({"listNotifs"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Serializer\Groups({"listNotifs"})
      */
     private $stageName;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Serializer\Groups({"listNotifs"})
      */
     private $coverImgUrl;
 

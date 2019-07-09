@@ -5,6 +5,8 @@ namespace App\Entity\Notif;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as Serializer;
+
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\Notif\NotificationRepository")
@@ -15,28 +17,52 @@ class Notification
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Serializer\Groups({"listNotifs"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=40)
+     * @Serializer\Groups({"listNotifs"})
      */
     private $type;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Serializer\Groups({"listNotifs"})
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
+     * @Serializer\Groups({"listNotifs"})
      */
     private $expiredAt;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Serializer\Groups({"listNotifs"})
      */
     private $description;
+
+
+    /**
+     * Relation polymorphique avec [album,playlist,track,user,podcast]
+     * 
+     * @ORM\Column(type="string", length=50, nullable=true)
+     * @Serializer\Groups({"listNotifs"})
+     */
+    private $sharedRef;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $sharedId;
+
+    /**
+     * @Serializer\Groups({"listNotifs"})
+     */
+    private $sharedContent;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Notif\NotificationUser", mappedBy="notification", orphanRemoval=true)
@@ -101,6 +127,42 @@ class Notification
         return $this;
     }
 
+
+    public function getSharedRef(): ?string
+    {
+        return $this->sharedRef;
+    }
+
+    public function setSharedRef(?string $sharedRef): self
+    {
+        $this->sharedRef = $sharedRef;
+
+        return $this;
+    }
+
+    public function getSharedId(): ?int
+    {
+        return $this->sharedId;
+    }
+
+    public function setSharedId(?int $sharedId): self
+    {
+        $this->sharedId = $sharedId;
+
+        return $this;
+    }
+
+    public function setSharedContent($sharedContent): self
+    {
+        $this->sharedContent = $sharedContent;
+        return $this;
+    }
+
+    public function getSharedContent(){
+        return $this->sharedContent;
+    }
+
+    
     /**
      * @return Collection|NotificationUser[]
      */

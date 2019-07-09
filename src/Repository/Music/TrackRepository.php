@@ -3,8 +3,9 @@
 namespace App\Repository\Music;
 
 use App\Entity\Music\Track;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
+use App\Repository\RepoInterface\SpecListnotifInterface;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @method Track|null find($id, $lockMode = null, $lockVersion = null)
@@ -12,13 +13,25 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
  * @method Track[]    findAll()
  * @method Track[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class TrackRepository extends ServiceEntityRepository
+class TrackRepository extends ServiceEntityRepository implements SpecListnotifInterface
 {
     public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, Track::class);
     }
 
+    public function findOneForListNotifs(int $id){
+        return $this->createQueryBuilder('t')
+            ->andWhere('t.id = :id')
+            ->leftJoin('t.album','alb')
+            ->addSelect('alb') 
+            ->leftJoin('alb.artist','ar')
+            ->addSelect('ar')                        
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->getOneOrNullResult();
+        ;        
+    }
     // /**
     //  * @return Track[] Returns an array of Track objects
     //  */

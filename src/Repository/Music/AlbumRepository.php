@@ -3,8 +3,9 @@
 namespace App\Repository\Music;
 
 use App\Entity\Music\Album;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
+use App\Repository\RepoInterface\SpecListnotifInterface;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @method Album|null find($id, $lockMode = null, $lockVersion = null)
@@ -12,13 +13,23 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
  * @method Album[]    findAll()
  * @method Album[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class AlbumRepository extends ServiceEntityRepository
+class AlbumRepository extends ServiceEntityRepository implements SpecListnotifInterface
 {
     public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, Album::class);
     }
 
+    public function findOneForListNotifs(int $id){
+        return $this->createQueryBuilder('a')
+            ->andWhere('a.id = :id')
+            ->leftJoin('a.artist','ar')
+            ->addSelect('ar')
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->getOneOrNullResult();
+        ;        
+    }
     // /**
     //  * @return Album[] Returns an array of Album objects
     //  */

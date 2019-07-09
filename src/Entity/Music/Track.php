@@ -5,6 +5,8 @@ namespace App\Entity\Music;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as Serializer;
+
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\Music\TrackRepository")
@@ -15,21 +17,25 @@ class Track
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Serializer\Groups({"listNotifs"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Serializer\Groups({"listNotifs"})
      */
     private $title;
 
     /**
      * @ORM\Column(type="float")
+     * @Serializer\Groups({"listNotifs"})
      */
     private $duration;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Music\Album", inversedBy="tracks")
+     * @Serializer\Groups({"listNotifs"})
      */
     private $album;
 

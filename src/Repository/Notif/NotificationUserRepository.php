@@ -2,9 +2,10 @@
 
 namespace App\Repository\Notif;
 
+use App\Entity\User\User;
 use App\Entity\Notif\NotificationUser;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @method NotificationUser|null find($id, $lockMode = null, $lockVersion = null)
@@ -19,6 +20,29 @@ class NotificationUserRepository extends ServiceEntityRepository
         parent::__construct($registry, NotificationUser::class);
     }
 
+    public function findList(User $user){
+        return $this->createQueryBuilder('nu')
+            ->andWhere('nu.user = :user')
+            ->setParameter('user', $user)
+            ->orderBy('nu.id', 'DESC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    public function findListForCounting(User $user,bool $onlyNotSeen = false) : int {
+        $query = $this->createQueryBuilder('nu')
+            ->andWhere('nu.user = :user')
+            ->setParameter('user', $user)
+            ->orderBy('nu.id', 'DESC');
+            if($onlyNotSeen){
+                $query = $query->andWhere('nu.seen = false');
+            }
+            $query = $query->getQuery()
+            ->getResult()
+        ;
+        return count($query);
+    }
     // /**
     //  * @return NotificationUser[] Returns an array of NotificationUser objects
     //  */

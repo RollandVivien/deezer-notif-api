@@ -2,9 +2,10 @@
 
 namespace App\Entity\User;
 
-use App\Entity\Notif\NotificationUser;
 use App\Entity\Playlist;
+use JMS\Serializer\Annotation as Serializer;
 use Doctrine\ORM\Mapping as ORM;
+use App\Entity\Notif\NotificationUser;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 
@@ -17,11 +18,13 @@ class User
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Serializer\Groups({"listNotifs"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Serializer\Groups({"listNotifs"})
      */
     private $username;
 

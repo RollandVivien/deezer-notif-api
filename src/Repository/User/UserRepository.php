@@ -3,8 +3,9 @@
 namespace App\Repository\User;
 
 use App\Entity\User\User;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
+use App\Repository\RepoInterface\SpecListnotifInterface;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @method User|null find($id, $lockMode = null, $lockVersion = null)
@@ -12,13 +13,21 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
  * @method User[]    findAll()
  * @method User[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class UserRepository extends ServiceEntityRepository
+class UserRepository extends ServiceEntityRepository implements SpecListnotifInterface
 {
     public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, User::class);
     }
 
+    public function findOneForListNotifs(int $id){
+        return $this->createQueryBuilder('u')
+            ->andWhere('u.id = :id')
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->getOneOrNullResult();
+        ;        
+    }
     // /**
     //  * @return User[] Returns an array of User objects
     //  */

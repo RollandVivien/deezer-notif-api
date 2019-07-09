@@ -3,7 +3,11 @@
 namespace App\Entity\Notif;
 
 use App\Entity\User\User;
+use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\EntityManagerInterface;
+use JMS\Serializer\Annotation as Serializer;
+
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\Notif\NotificationUserRepository")
@@ -14,6 +18,7 @@ class NotificationUser
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Serializer\Groups({"listNotifs"})
      */
     private $id;
 
@@ -24,28 +29,19 @@ class NotificationUser
     private $user;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Notif\Notification", inversedBy="notificationUsers")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $notification;
-
-    /**
      * @ORM\Column(type="boolean", options={"default":0})
+     * @Serializer\Groups({"listNotifs"})
      */
     private $seen = 0;
 
     /**
-     * Relation polymorphique avec [album,playlist,track,user,podcast]
-     * 
-     * @ORM\Column(type="string", length=50, nullable=true)
+     * @ORM\ManyToOne(targetEntity="App\Entity\Notif\Notification", inversedBy="notificationUsers")
+     * @ORM\JoinColumn(nullable=false)
+     * @Serializer\Groups({"listNotifs"})
      */
-    private $sharedRef;
+    private $notification;
 
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    private $sharedId;
-
+    
     public function getId(): ?int
     {
         return $this->id;
@@ -87,27 +83,7 @@ class NotificationUser
         return $this;
     }
 
-    public function getSharedRef(): ?string
-    {
-        return $this->sharedRef;
-    }
 
-    public function setSharedRef(?string $sharedRef): self
-    {
-        $this->sharedRef = $sharedRef;
 
-        return $this;
-    }
 
-    public function getSharedId(): ?int
-    {
-        return $this->sharedId;
-    }
-
-    public function setSharedId(?int $sharedId): self
-    {
-        $this->sharedId = $sharedId;
-
-        return $this;
-    }
 }
