@@ -2,6 +2,8 @@
 
 `composer install`
 
+Modifier le fichier .env à la racine pour paramétrer la bdd. Par défault à DATABASE_URL=mysql://root:@127.0.0.1:3306/deezer-notif-api
+
 `php bin/console doctrine:database:create`
 
 `php bin/console doctrine:database:import "src/DataFixtures/deezer-notif-api.sql"` 
