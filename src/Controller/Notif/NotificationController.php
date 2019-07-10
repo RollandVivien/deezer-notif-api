@@ -2,7 +2,7 @@
 
 namespace App\Controller\Notif;
 
-use App\Entity\Article;
+
 use FOS\RestBundle\View\View;
 use Doctrine\ORM\EntityManager;
 use App\Repository\User\UserRepository;
@@ -11,7 +11,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\Notif\NotificationRepository;
-use FOS\RestBundle\Request\ParamFetcherInterface;
 use App\Repository\Notif\NotificationUserRepository;
 use FOS\RestBundle\Controller\Annotations as FOSRest;
 use FOS\RestBundle\Controller\Annotations\RequestParam;
@@ -102,26 +101,4 @@ class NotificationController extends AbstractController
         return View::create(null, Response::HTTP_NO_CONTENT, []);
     }
 
-    public function test(){
-        return 8;
-    }
-
-    // /**
-    //  * Create Article.
-    //  * @FOSRest\Post(path="/article", name="notif_post_one")
-    //  *
-    //  * @return array
-    //  */
-
-    // public function postNotifAction(Request $request)
-    // {
-    //     $article = new Article();
-    //     $article->setName($request->get('name'));
-    //     $article->setDescription($request->get('description'));
-    //     $em = $this->getDoctrine()->getManager();
-    //     $em->persist($article);
-    //     $em->flush();
-
-    //     return View::create($article, Response::HTTP_CREATED, []);
-    // }
 }

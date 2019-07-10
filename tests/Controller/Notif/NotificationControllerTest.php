@@ -11,7 +11,6 @@ class NotificationControllerTest extends WebTestCase
 
     /**
      * @test
-     *
      */
     public function routing_getNotifsAction(){
 
@@ -23,7 +22,6 @@ class NotificationControllerTest extends WebTestCase
 
     /**
      * @test
-     *
      */
     public function routing_postNotifSeen(){
 
@@ -66,8 +64,6 @@ class NotificationControllerTest extends WebTestCase
     /**
      * @test
      * Les sharables doivent etre des chemins vers des class;
-     *
-     * @return void
      */
     public function sharables_are_class(){
 

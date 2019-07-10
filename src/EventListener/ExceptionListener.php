@@ -13,13 +13,13 @@ class ExceptionListener
     public function onKernelException(GetResponseForExceptionEvent $event)
     {
         // $event->setResponse(View::create(['bad request'], Response::HTTP_BAD_REQUEST, []));
-        // $response = new JsonResponse([
-        //             'statusCode'    => '404',
-        //             'message'       => '404 not found',
-        //     ]);
-        // $response->setStatusCode(404);
-        // $response->headers->set('Content-Type', 'application/problem+json');   
-        // $event->setResponse($response);
+        $response = new JsonResponse([
+                    'statusCode'    => '404',
+                    'message'       => '404 not found',
+            ]);
+        $response->setStatusCode(404);
+        $response->headers->set('Content-Type', 'application/problem+json');   
+        $event->setResponse($response);
      
     }
 }
