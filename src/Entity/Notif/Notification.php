@@ -2,6 +2,7 @@
 
 namespace App\Entity\Notif;
 
+use App\Entity\User\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -22,7 +23,7 @@ class Notification
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=40)
+     * @ORM\Column(type="string", length=40, nullable=false)
      * @Serializer\Groups({"listNotifs"})
      */
     private $type;
@@ -68,6 +69,12 @@ class Notification
      * @ORM\OneToMany(targetEntity="App\Entity\Notif\NotificationUser", mappedBy="notification", orphanRemoval=true)
      */
     private $notificationUsers;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\User\User", inversedBy="notifications")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $creator;
 
     public function __construct()
     {
@@ -190,6 +197,18 @@ class Notification
                 $notificationUser->setNotification(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCreator(): ?User
+    {
+        return $this->creator;
+    }
+
+    public function setCreator(?User $creator): self
+    {
+        $this->creator = $creator;
 
         return $this;
     }

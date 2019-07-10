@@ -2,7 +2,8 @@
 
 namespace App\Entity\User;
 
-use App\Entity\Playlist;
+use App\Entity\Notif\Notification;
+use App\Entity\Music\Playlist;
 use JMS\Serializer\Annotation as Serializer;
 use Doctrine\ORM\Mapping as ORM;
 use App\Entity\Notif\NotificationUser;
@@ -29,6 +30,12 @@ class User
     private $username;
 
     /**
+     * @ORM\Column(type="string", length=255)
+     * @Serializer\Groups({"listNotifs"})
+     */
+    private $role;
+
+    /**
      * @ORM\OneToMany(targetEntity="App\Entity\Music\Playlist", mappedBy="author", orphanRemoval=true)
      */
     private $playlists;
@@ -38,10 +45,16 @@ class User
      */
     private $notificationUsers;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Notif\Notification", mappedBy="creator", orphanRemoval=true)
+     */
+    private $notifications;
+
     public function __construct()
     {
         $this->playlists = new ArrayCollection();
         $this->notificationUsers = new ArrayCollection();
+        $this->notifications = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -57,6 +70,26 @@ class User
     public function setUsername(string $username): self
     {
         $this->username = $username;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of role
+     */ 
+    public function getRole()
+    {
+        return $this->role;
+    }
+
+    /**
+     * Set the value of role
+     *
+     * @return  self
+     */ 
+    public function setRole(string $role): self
+    {
+        $this->role = $role;
 
         return $this;
     }
@@ -122,4 +155,37 @@ class User
 
         return $this;
     }
+
+    /**
+     * @return Collection|Notification[]
+     */
+    public function getNotifications(): Collection
+    {
+        return $this->notifications;
+    }
+
+    public function addNotification(Notification $notification): self
+    {
+        if (!$this->notifications->contains($notification)) {
+            $this->notifications[] = $notification;
+            $notification->setCreator($this);
+        }
+
+        return $this;
+    }
+
+    public function removeNotification(Notification $notification): self
+    {
+        if ($this->notifications->contains($notification)) {
+            $this->notifications->removeElement($notification);
+            // set the owning side to null (unless already changed)
+            if ($notification->getCreator() === $this) {
+                $notification->setCreator(null);
+            }
+        }
+
+        return $this;
+    }
+
+
 }

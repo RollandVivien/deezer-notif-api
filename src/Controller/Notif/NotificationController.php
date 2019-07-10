@@ -28,7 +28,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class NotificationController extends AbstractController
 {
 
-    private $listOfSharableContent;
+    public $listOfSharableContent;
 
     public function __construct(){
 
@@ -79,17 +79,16 @@ class NotificationController extends AbstractController
     /**
      * Set manually seen notif by user.
      * @FOSRest\Post(path="/notification/seen", name="notif_post_one")
-     * @RequestParam(
-     *     name="id",
-     *     requirements="[0-9]",
-     *     nullable=false,
-     *     description="Id of notification"
-     * )
      */
-    public function postNotifSeen(ParamFetcherInterface $paramFetcher, UserRepository $userRepo, NotificationRepository $nRepo, NotificationUserRepository $nuRepo, EntityManagerInterface $em)
+    public function postNotifSeen(Request $request, UserRepository $userRepo, NotificationRepository $nRepo, NotificationUserRepository $nuRepo, EntityManagerInterface $em)
     {
         $user = $userRepo->find(1);
-        $notif = $nRepo->find($paramFetcher->get('id'));
+
+        $notifId = (int) $request->get('id');
+        if($notifId<0){
+            return View::create(['message'=>'Opération impossible'], Response::HTTP_METHOD_NOT_ALLOWED, []);
+        }
+        $notif = $nRepo->find($notifId);
         
         $notif = $nuRepo->findBy(['user'=>$user,'notification'=>$notif]);
         if($notif && $notif[0]->getSeen()===false){
@@ -97,10 +96,14 @@ class NotificationController extends AbstractController
             $em->persist($notif[0]);
             $em->flush();
         }else{
-            return View::create(['message'=>'Opération impossible'], Response::HTTP_BAD_REQUEST, []);
+            return View::create(['message'=>'Opération impossible'], Response::HTTP_METHOD_NOT_ALLOWED, []);
         }
 
-        return View::create(['message'=>'Notification vue'], Response::HTTP_OK, []);
+        return View::create(null, Response::HTTP_NO_CONTENT, []);
+    }
+
+    public function test(){
+        return 8;
     }
 
     // /**
