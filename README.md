@@ -6,6 +6,8 @@ Modifier le fichier .env à la racine pour paramétrer la bdd. Par défault à D
 
 `php bin/console doctrine:database:create`
 
+`php bin/console doctrine:migrations:migrate`
+
 `php bin/console doctrine:database:import "src/DataFixtures/deezer-notif-api.sql"` 
 
 Pour importer la bdd de test.
