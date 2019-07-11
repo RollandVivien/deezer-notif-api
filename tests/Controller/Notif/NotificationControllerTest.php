@@ -9,6 +9,12 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 class NotificationControllerTest extends WebTestCase
 {
 
+    private $sharableContent;
+
+    protected function setUp(){
+        parent::setUp();
+        $this->sharableContent = ['album','playlist','track','user','podcast'];
+    }
     /**
      * @test
      */
@@ -32,12 +38,21 @@ class NotificationControllerTest extends WebTestCase
         
     }
 
-    
+    /**
+     * @test
+     */
+    public function getNotifsAction_return_json(){
+        $client = static::createClient();
+        $crawler = $client->request('GET', '/api/notifications');
+        $json = $this->is_json($client->getResponse()->getContent());
+        $this->assertEquals(true, $json, "Doit retourner un JSON.");
+    }
+
     /** 
      * @test 
      * Il faut tester le tableau instancié dans le constructeur, car il sert au lazy loading des contenus partagés.
      * Si un développeur s'amuse à trafiquer ce tableau, on est cuit.
-     * Il faudra venir modifier ce test si une nouvelle entity devient partagable.
+     * Il faudra venir modifier ce test si une nouvelle entity devient partageable.
      * 
      * */
     public function constructor_has_specific_array(){
@@ -47,11 +62,9 @@ class NotificationControllerTest extends WebTestCase
 
         $this->assertInternalType('array', $listOfSharableContent);
 
-        $sharableContentTest = ['album','playlist','track','user','podcast'];
-        
         $rupt = true;
         foreach($listOfSharableContent as $k => $v){
-            if(!in_array($k,$sharableContentTest)){
+            if(!in_array($k,$this->sharableContent)){
                 $rupt = false;
                 break;
             }
@@ -78,6 +91,13 @@ class NotificationControllerTest extends WebTestCase
         
         $this->assertEquals(true,true); // phpunit affiche risky si on laisse seulement l'assert dans le foreach.
 
+    }
+
+
+    private function is_json($string)
+    {
+        $data = json_decode($string);
+        return (json_last_error() == JSON_ERROR_NONE) ?  true : false;
     }
 
 
